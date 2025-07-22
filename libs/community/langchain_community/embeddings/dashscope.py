@@ -115,7 +115,10 @@ class DashScopeEmbeddings(BaseModel, Embeddings):
     """The DashScope client."""
     model: str = "text-embedding-v1"
     dashscope_api_key: Optional[str] = None
+
     dimensions: int = 1024  # only for text-embedding-v3 and text-embedding-v4
+    """The dimension size for embeddings. Only supported for text-embedding-v3 and text-embedding-v4 models."""
+
     max_retries: int = 5
     """Maximum number of retries to make when generating."""
 
