@@ -62,6 +62,13 @@ def test_dashscope_embedding_query() -> None:
     assert len(output) == 1536
 
 
+def test_dashscope_embedding_query_with_dimensions() -> None:
+    """Test dashscope embeddings with dimensions."""
+    document = "foo bar"
+    embedding = DashScopeEmbeddings(model="text-embedding-v3", dimensions=1024)
+    output = embedding.embed_query(document)
+    assert len(output) == 1024
+
 def test_dashscope_embedding_with_empty_string() -> None:
     """Test dashscope embeddings with empty string."""
     import dashscope

@@ -59,7 +59,7 @@ def embed_with_retry(embeddings: DashScopeEmbeddings, **kwargs: Any) -> Any:
         batch_size = BATCH_SIZE.get(kwargs["model"], 25)
         while i < input_len:
             kwargs["input"] = (
-                input_data[i : i + batch_size]
+                input_data[i: i + batch_size]
                 if isinstance(input_data, list)
                 else input_data
             )
@@ -115,6 +115,7 @@ class DashScopeEmbeddings(BaseModel, Embeddings):
     """The DashScope client."""
     model: str = "text-embedding-v1"
     dashscope_api_key: Optional[str] = None
+    dimensions: int = 1024  # only for text-embedding-v3 and text-embedding-v4
     max_retries: int = 5
     """Maximum number of retries to make when generating."""
 
@@ -153,7 +154,7 @@ class DashScopeEmbeddings(BaseModel, Embeddings):
             List of embeddings, one for each text.
         """
         embeddings = embed_with_retry(
-            self, input=texts, text_type="document", model=self.model
+            self, input=texts, text_type="document", model=self.model, dimension=self.dimensions
         )
         embedding_list = [item["embedding"] for item in embeddings]
         return embedding_list
@@ -168,6 +169,6 @@ class DashScopeEmbeddings(BaseModel, Embeddings):
             Embedding for the text.
         """
         embedding = embed_with_retry(
-            self, input=text, text_type="query", model=self.model
+            self, input=text, text_type="query", model=self.model, dimension=self.dimensions
         )[0]["embedding"]
         return embedding
